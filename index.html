@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+<h2>Ctrl+V粘贴图片</h2>
+<p id="console" style="white-space:pre;"></p>
+
+<script>
+document.body.onpaste = function(e) {
+    var items = e.clipboardData.items;
+    for (var i = 0; i < items.length; ++i) {
+        var item = e.clipboardData.items[i];
+        if (items[i].kind == 'file' && items[i].type.match(/^image\//i)) {
+            var fileReader = new FileReader();
+            fileReader.onloadend = function () {
+                // var img = document.createElement("img");
+                // img.src= this.result;
+                // document.body.appendChild(img);
+                postData(this.result,"/upload");
+            };
+            fileReader.readAsDataURL(item.getAsFile());
+            break; 
+        }
+    }
+    function postData(data,url){
+        xhr=new XMLHttpRequest();
+        xhr.open("POST",url,true);
+        xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xhr.send("filename="+new Date().getTime()+"&img="+data);
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState==4 && xhr.status==200){
+                // console.log(xhr.responseText);
+                var img = document.createElement("img");
+                img.src = xhr.responseText;
+                document.body.appendChild(img);
+            }
+        }
+    }
+};
+// var clipboardData,items,item;//for chrome
+
+// //ev是事件，其实大家都喜欢用e或者evt或者event
+// //这句主要是确定剪贴板中是否有图片
+// if(ev&&
+//     (clipboardData=ev.originalEvent.clipboardData)&&
+//     (items=clipboardData.items)&&
+//     (item=items[0])&&item.kind=='file'&&item.type.match(/^image\//i)
+// ){
+//     var blob = item.getAsFile(),    //blob就是剪贴板中的二进制图片数据
+//         reader = new FileReader();
+
+//     //定义fileReader读取完数据后的回调
+//     reader.onload=function(){
+//         var sHtml='<img src="'+event.target.result+'">';    //result是base64编码后的图片
+//         //这里执行了一个将base64上报到服务器，然后将图片url从base64编码的图片数据换成上传后的图片地址
+//         sHtml=replaceRemoteImg(sHtml);
+//         _this.pasteHTML(sHtml);//这里应该是关于光标和插入代码的具体操作
+//     }
+
+//     reader.readAsDataURL(blob); //用fileReader读取二进制图片，完成后会调用上面定义的回调函数
+//     return false;
+// }
+</script>
+</body>
+</html>
