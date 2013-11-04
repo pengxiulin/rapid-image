@@ -6,8 +6,25 @@
 </head>
 <body>
 
-<h2>Ctrl+V粘贴图片</h2>
-<p id="console" style="white-space:pre;"></p>
+    <h2>请在Chrome下做如下两个操作：</h2>
+    <ol>
+        <li>
+            <details>
+                <summary>复制一段图片到剪切板</summary>
+                <ul>
+                    <li>按住PrintScreen，或者Alt+PrintScreen</li>
+                    <li>按住Alt+Q调用Lync截图</li>
+                    <li>使用QQ的截图快捷键</li>
+                    <li>其它截图工具</li>
+                    <li>Chrome中<a href="http://img10.360buyimg.com/da/g14/M07/19/08/rBEhVlJ0X-wIAAAAAABxFNw0h80AAE79gE-EdIAAHEs267.jpg" target="_blank">打开一个图片网址</a>，然后按住Ctrl+C，即可复制这个图片</li>
+                </ul>
+            </details>
+        </li>
+        <li>
+            在本页面按住Ctrl+V，即可粘贴到页面
+        </li>
+    </ol>
+    <p id="console" style="white-space:pre;"></p>
 
 <script>
 document.body.onpaste = function(e) {
@@ -17,9 +34,9 @@ document.body.onpaste = function(e) {
         if (items[i].kind == 'file' && items[i].type.match(/^image\//i)) {
             var fileReader = new FileReader();
             fileReader.onloadend = function () {
-                // var img = document.createElement("img");
-                // img.src= this.result;
-                // document.body.appendChild(img);
+                var img = document.createElement("img");
+                img.src= this.result;
+                document.body.appendChild(img);
                 postData(this.result,"/upload");
             };
             fileReader.readAsDataURL(item.getAsFile());
@@ -36,8 +53,17 @@ document.body.onpaste = function(e) {
                 // console.log(xhr.responseText);
                 var img = document.createElement("img");
                 img.src = xhr.responseText;
-                document.body.appendChild(img);
+                // document.body.appendChild(img);
+                showLinkAddress(xhr.responseText);
             }
+        }
+        function showLinkAddress(address){
+            prompt("图片已经成功上传，Ctrl+C复制图片地址！",location.href+address);
+            // var input = document.createElement("input");
+            // input.value=address;
+            // input.onfocus="javascript:this.select();";
+            // input.autofocus="autofocus";
+            // document.body.appendChild(input);
         }
     }
 };
