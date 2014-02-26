@@ -47,6 +47,11 @@
     </div>
 
 <script>
+var isChrome = /Chrome/.test(navigator.userAgent);
+if(!isChrome){
+    // 隐藏broser-chrome
+    // 显示broser-others
+}
 document.body.onpaste = function(e) {
     var items = e.clipboardData.items;
     for (var i = 0; i < items.length; ++i) {
@@ -58,6 +63,7 @@ document.body.onpaste = function(e) {
                 img.src= this.result;
                 document.body.appendChild(img);
                 // TODO 预先对图像进行处理
+                // 用到Canvas图像处理技术：图片压缩
                 postData(this.result,"/upload");
             };
             fileReader.readAsDataURL(item.getAsFile());
