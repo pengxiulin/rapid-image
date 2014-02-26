@@ -1,30 +1,50 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>Document</title>
+    <meta charset="UTF-8"/>
+    <title>图片快速分享</title>
+    <style>
+    .browser-chrome{
+        display:none;
+    }
+    .browser-others{
+        display:block;
+    }
+    @media screen and (-webkit-min-device-pixel-ratio:0) {
+        .browser-chrome{
+            display:block;
+        }
+        .browser-others{
+            display:none;
+        }
+    }
+    </style>
 </head>
 <body>
-
-    <h2>请在Chrome下做如下两个操作：</h2>
-    <ol>
-        <li>
-            <details>
-                <summary>复制一段图片到剪切板</summary>
-                <ul>
-                    <li>按住PrintScreen，或者Alt+PrintScreen</li>
-                    <li>按住Alt+Q调用Lync截图</li>
-                    <li>使用QQ的截图快捷键</li>
-                    <li>其它截图工具</li>
-                    <li>Chrome中<a href="http://img10.360buyimg.com/da/g14/M07/19/08/rBEhVlJ0X-wIAAAAAABxFNw0h80AAE79gE-EdIAAHEs267.jpg" target="_blank">打开一个图片网址</a>，然后按住Ctrl+C，即可复制这个图片</li>
-                </ul>
-            </details>
-        </li>
-        <li>
-            在本页面按住Ctrl+V，即可粘贴到页面
-        </li>
-    </ol>
-    <p id="console" style="white-space:pre;"></p>
+    <div class="browser-chrome">
+        <h2>请在Chrome下做如下两个操作：</h2>
+        <ol>
+            <li>
+                <details>
+                    <summary>复制一段图片到剪切板</summary>
+                    <ul>
+                        <li>按住PrintScreen，或者Alt+PrintScreen</li>
+                        <li>按住Alt+Q调用Lync截图</li>
+                        <li>使用QQ的截图快捷键</li>
+                        <li>其它截图工具</li>
+                        <li>Chrome中<a href="http://img10.360buyimg.com/da/g14/M07/19/08/rBEhVlJ0X-wIAAAAAABxFNw0h80AAE79gE-EdIAAHEs267.jpg" target="_blank">打开一个图片网址</a>，然后按住Ctrl+C，即可复制这个图片</li>
+                    </ul>
+                </details>
+            </li>
+            <li>
+                在本页面按住Ctrl+V，即可粘贴到页面
+            </li>
+        </ol>
+        <p id="console" style="white-space:pre;"></p>
+    </div>
+    <div class="browser-others">
+        This page is for chrome only for now!
+    </div>
 
 <script>
 document.body.onpaste = function(e) {
@@ -37,6 +57,7 @@ document.body.onpaste = function(e) {
                 var img = document.createElement("img");
                 img.src= this.result;
                 document.body.appendChild(img);
+                // TODO 预先对图像进行处理
                 postData(this.result,"/upload");
             };
             fileReader.readAsDataURL(item.getAsFile());
@@ -59,37 +80,9 @@ document.body.onpaste = function(e) {
         }
         function showLinkAddress(address){
             prompt("图片已经成功上传，Ctrl+C复制图片地址！",location.href+address);
-            // var input = document.createElement("input");
-            // input.value=address;
-            // input.onfocus="javascript:this.select();";
-            // input.autofocus="autofocus";
-            // document.body.appendChild(input);
         }
     }
 };
-// var clipboardData,items,item;//for chrome
-
-// //ev是事件，其实大家都喜欢用e或者evt或者event
-// //这句主要是确定剪贴板中是否有图片
-// if(ev&&
-//     (clipboardData=ev.originalEvent.clipboardData)&&
-//     (items=clipboardData.items)&&
-//     (item=items[0])&&item.kind=='file'&&item.type.match(/^image\//i)
-// ){
-//     var blob = item.getAsFile(),    //blob就是剪贴板中的二进制图片数据
-//         reader = new FileReader();
-
-//     //定义fileReader读取完数据后的回调
-//     reader.onload=function(){
-//         var sHtml='<img src="'+event.target.result+'">';    //result是base64编码后的图片
-//         //这里执行了一个将base64上报到服务器，然后将图片url从base64编码的图片数据换成上传后的图片地址
-//         sHtml=replaceRemoteImg(sHtml);
-//         _this.pasteHTML(sHtml);//这里应该是关于光标和插入代码的具体操作
-//     }
-
-//     reader.readAsDataURL(blob); //用fileReader读取二进制图片，完成后会调用上面定义的回调函数
-//     return false;
-// }
 </script>
 </body>
 </html>
