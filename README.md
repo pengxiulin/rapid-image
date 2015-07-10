@@ -3,9 +3,6 @@ rapid-image
 
 Chrome浏览器下的文件快速上传工具，后台使用nodejs
 
-项目产生的原因：
-Lync截图不好用：跨网段不能分享图片神马的各种问题
-
 使用方法：
 
 - 运行server.js
